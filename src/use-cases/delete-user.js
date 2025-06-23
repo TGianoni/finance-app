@@ -1,10 +1,9 @@
 export class DeleteUserUseCase {
-    constructor(postgresDeleteUserRepository) {
-        this.postgresDeleteUserRepository = postgresDeleteUserRepository
+    constructor(deleteUserRepository) {
+        this.deleteUserRepository = deleteUserRepository
     }
     async execute(userId) {
-        const deletedUser =
-            await this.postgresDeleteUserRepository.execute(userId)
+        const deletedUser = await this.deleteUserRepository.execute(userId)
 
         return deletedUser
     }
