@@ -30,7 +30,7 @@ export class UpdateTransactionController {
                 (field) => !allowedFields.includes(field),
             )
 
-            if (!someFieldIsNotAllowed) {
+            if (someFieldIsNotAllowed) {
                 return badRequest({
                     message: 'Some provided fields are not allowed',
                 })
@@ -52,7 +52,7 @@ export class UpdateTransactionController {
                 }
             }
 
-            const transaction = this.updateTransactionUseCase.execute(
+            const transaction = await this.updateTransactionUseCase.execute(
                 httpRequest.params.transactionId,
                 params,
             )
