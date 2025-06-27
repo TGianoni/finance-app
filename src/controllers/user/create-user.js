@@ -1,13 +1,6 @@
-import {
-    checkIfEmailIsValid,
-    checkIfPasswordIsValid,
-    emailIsAlreadyInUseResponse,
-    invalidPasswordResponse,
-    created,
-    serverError,
-    validateRequiredFields,
-    requiredFieldIsMissingResponse,
-} from '../helpers/index.js'
+import { createUserSchema } from '../../schemas/user.js'
+import { badRequest, created, serverError } from '../helpers/index.js'
+import { ZodError } from 'zod'
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -16,31 +9,8 @@ export class CreateUserController {
     async execute(httpRequest) {
         try {
             const params = httpRequest.body
-            // validar a requisição (campos obrigatórios, tamanho de senha e tamanho de senha)
-            const requiredFields = [
-                'first_name',
-                'last_name',
-                'email',
-                'password',
-            ]
 
-            const { ok: requiredFieldsWereProvided, missingField } =
-                validateRequiredFields(params, requiredFields)
-
-            if (!requiredFieldsWereProvided) {
-                return requiredFieldIsMissingResponse(missingField)
-            }
-
-            const passwordIsValid = checkIfPasswordIsValid(params.password)
-
-            if (!passwordIsValid) {
-                return invalidPasswordResponse()
-            }
-
-            const emailIsValid = checkIfEmailIsValid(params.email)
-            if (!emailIsValid) {
-                return emailIsAlreadyInUseResponse()
-            }
+            await createUserSchema.parseAsync(params)
 
             const createdUser = await this.createUserUseCase.execute(params)
 
@@ -48,6 +18,11 @@ export class CreateUserController {
 
             // Retornar a resposta para o usuário (status code)
         } catch (error) {
+            if (error instanceof ZodError) {
+                return badRequest({
+                    message: error.errors[0].message,
+                })
+            }
             console.error(error)
             return serverError()
         }
