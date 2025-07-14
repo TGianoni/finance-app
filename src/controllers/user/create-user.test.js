@@ -1,4 +1,5 @@
 import { CreateUserController } from './create-user.js'
+import { faker } from '@faker-js/faker'
 
 describe('Create User Controller', () => {
     class CreateUserUseCaseStub {
@@ -14,10 +15,10 @@ describe('Create User Controller', () => {
 
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                last_name: 'Gianoni',
-                email: 'thiago@test.com',
-                password: '1234567',
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
+                email: faker.internet.email(),
+                password: faker.internet.password(),
             },
         }
 
@@ -39,9 +40,9 @@ describe('Create User Controller', () => {
 
         const httpRequest = {
             body: {
-                last_name: 'Gianoni',
-                email: 'thiago@test.com',
-                password: '1234567',
+                last_name: faker.person.lastName(),
+                email: faker.internet.email(),
+                password: faker.internet.password(),
             },
         }
 
@@ -60,9 +61,9 @@ describe('Create User Controller', () => {
 
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                email: 'thiago@test.com',
-                password: '1234567',
+                first_name: faker.person.firstName(),
+                email: faker.internet.email(),
+                password: faker.internet.password(),
             },
         }
 
@@ -79,9 +80,9 @@ describe('Create User Controller', () => {
         const createUserController = new CreateUserController(createUserUseCase)
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                last_name: 'Gianoni',
-                password: '1234567',
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
+                password: faker.internet.password(),
             },
         }
 
@@ -98,10 +99,10 @@ describe('Create User Controller', () => {
         const createUserController = new CreateUserController(createUserUseCase)
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                last_name: 'Gianoni',
-                email: 'thiago',
-                password: '1234567',
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
+                email: 'invalid_email',
+                password: faker.internet.password(),
             },
         }
 
@@ -118,8 +119,8 @@ describe('Create User Controller', () => {
         const createUserController = new CreateUserController(createUserUseCase)
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                last_name: 'Gianoni',
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
                 email: 'thiago',
                 password: '123',
             },
@@ -138,10 +139,10 @@ describe('Create User Controller', () => {
         const createUserController = new CreateUserController(createUserUseCase)
         const httpRequest = {
             body: {
-                first_name: 'Thiago',
-                last_name: 'Gianoni',
-                email: 'thiago@test.com',
-                password: '1234567',
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
+                email: faker.internet.email(),
+                password: faker.internet.password(),
             },
         }
 
