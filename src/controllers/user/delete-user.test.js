@@ -55,15 +55,29 @@ describe('DeleteUserController', () => {
         expect(result.statusCode).toBe(400)
     })
 
-    it('should return 404 if user is not found', async () => {
+    it('should return 400 if user is not found', async () => {
         // arrange
         const { sut, deleteUserUseCase } = makeSut()
-        jest.spyOn(deleteUserUseCase, 'execute').mockReturnValueOnce(() => null)
+        jest.spyOn(deleteUserUseCase, 'execute').mockReturnValueOnce(null)
 
         // act
         const result = await sut.execute(httpRequest)
 
         // assert
-        expect(result.statusCode).toBe(404)
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 500 if DeleteUserUseCase throws', async () => {
+        // arrange
+        const { sut, deleteUserUseCase } = makeSut()
+        jest.spyOn(deleteUserUseCase, 'execute').mockImplementationOnce(() => {
+            throw new Error('Internal Server Error')
+        })
+
+        // act
+        const result = await sut.execute(httpRequest)
+
+        // assert
+        expect(result.statusCode).toBe(500)
     })
 })
