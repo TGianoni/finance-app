@@ -1,3 +1,4 @@
+import { ZodError } from 'zod'
 import { UpdateUserController } from './update-user'
 import { faker } from '@faker-js/faker'
 
@@ -121,5 +122,22 @@ describe('UpdateUserController', () => {
 
         // assert
         expect(result.statusCode).toBe(500)
+    })
+
+    it('should return 400 if UpdateUserUseCase throws email already in use error', async () => {
+        // arrange
+        const { sut, updateUserUseCase } = makeSut()
+        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
+            new ZodError(faker.internet.email()),
+        )
+
+        // act
+        const result = await sut.execute({
+            params: httpRequest.params,
+            body: httpRequest.body,
+        })
+
+        // assert
+        expect(result.statusCode).toBe(400)
     })
 })
