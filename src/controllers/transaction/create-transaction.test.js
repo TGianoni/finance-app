@@ -26,12 +26,28 @@ describe('Create Transaction Controller', () => {
             amount: Number(faker.finance.amount()),
         },
     }
-    it('should return 201 whren creating a transaction sucessfully', async () => {
+    it('should return 201 whren creating a transaction sucessfully (expense)', async () => {
         // arrange
         const { sut } = makeSut()
 
         // act
         const response = await sut.execute(baseHttpRequest)
+
+        // assert
+        expect(response.statusCode).toBe(201)
+    })
+
+    it('should return 201 whren creating a transaction sucessfully (earning)', async () => {
+        // arrange
+        const { sut } = makeSut()
+
+        // act
+        const response = await sut.execute({
+            body: {
+                ...baseHttpRequest.body,
+                type: 'EARNING',
+            },
+        })
 
         // assert
         expect(response.statusCode).toBe(201)
