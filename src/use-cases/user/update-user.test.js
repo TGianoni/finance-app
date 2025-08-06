@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { UpdateUserUseCase } from './update-user.js'
+import { EmailAlreadyInUseError } from '../../errors/user.js'
 
 describe('UpdateUserUseCase', () => {
     const user = {
@@ -12,6 +13,11 @@ describe('UpdateUserUseCase', () => {
         }),
     }
 
+    class UpdateUserRepositoryStub {
+        async execute() {
+            return user
+        }
+    }
     class GetUserByEmailRepositoryStub {
         async execute() {
             return null
@@ -24,27 +30,21 @@ describe('UpdateUserUseCase', () => {
         }
     }
 
-    class UpdateUserRepositoryStub {
-        async execute() {
-            return user
-        }
-    }
-
     const makeSut = () => {
-        const getUserByIdRepository = new GetUserByEmailRepositoryStub()
-        const passwordHasherAdapter = new PasswordHasherAdapterStub()
         const updateUserRepository = new UpdateUserRepositoryStub()
+        const getUserByEmailRepository = new GetUserByEmailRepositoryStub()
+        const passwordHasherAdapter = new PasswordHasherAdapterStub()
 
         const sut = new UpdateUserUseCase(
-            getUserByIdRepository,
             updateUserRepository,
+            getUserByEmailRepository,
             passwordHasherAdapter,
         )
 
         return {
             sut,
-            getUserByIdRepository,
             updateUserRepository,
+            getUserByEmailRepository,
             passwordHasherAdapter,
         }
     }
@@ -64,9 +64,9 @@ describe('UpdateUserUseCase', () => {
     })
     it('should update user sucessfully(with email)', async () => {
         // arrange
-        const { sut, getUserByIdRepository } = makeSut()
-        const getUserByIdRepositorySpy = jest.spyOn(
-            getUserByIdRepository,
+        const { sut, getUserByEmailRepository } = makeSut()
+        const getUserByEmailRepositorySpy = jest.spyOn(
+            getUserByEmailRepository,
             'execute',
         )
 
@@ -78,7 +78,7 @@ describe('UpdateUserUseCase', () => {
         })
 
         // assert
-        expect(getUserByIdRepositorySpy).toHaveBeenCalledWith(email)
+        expect(getUserByEmailRepositorySpy).toHaveBeenCalledWith(email)
         expect(result).toBe(user)
     })
     it('should update user sucessfully(with password)', async () => {
@@ -99,5 +99,20 @@ describe('UpdateUserUseCase', () => {
         // assert
         expect(passwordHasherAdapterSpy).toHaveBeenCalledWith(password)
         expect(result).toBe(user)
+    })
+    it('should throw EmailAlreadyInUseError if email is already in use', async () => {
+        // arrange
+        const { sut, getUserByEmailRepository } = makeSut()
+        jest.spyOn(getUserByEmailRepository, 'execute').mockResolvedValue(user)
+
+        // act
+        const result = sut.execute(faker.string.uuid(), {
+            email: user.email,
+        })
+
+        // assert
+        await expect(result).rejects.toThrow(
+            new EmailAlreadyInUseError(user.email),
+        )
     })
 })

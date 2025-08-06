@@ -2,15 +2,15 @@ import { EmailAlreadyInUseError } from '../../errors/user.js'
 
 export class UpdateUserUseCase {
     constructor(
-        getUserByEmailRepository,
         updateUserRepository,
+        getUserByEmailRepository,
         passwordHasherAdapter,
     ) {
         this.updateUserRepository = updateUserRepository
         this.getUserByEmailRepository = getUserByEmailRepository
         this.passwordHasherAdapter = passwordHasherAdapter
     }
-    async execute(userId, updateUserParams = {}) {
+    async execute(userId, updateUserParams) {
         // se o e-mail estiver sendo atualizado, verificar se já existe um usuário com esse e-mail
         if (updateUserParams.email) {
             const userWithProvideEmail =
