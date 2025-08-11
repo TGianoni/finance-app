@@ -1,10 +1,11 @@
 import { ZodError } from 'zod'
 import { UpdateUserController } from './update-user'
 import { faker } from '@faker-js/faker'
+import { user } from '../../tests/index.js'
 
 describe('UpdateUserController', () => {
     class UpdateUserUseCaseStub {
-        async execute(user) {
+        async execute() {
             return user
         }
     }
