@@ -2,9 +2,9 @@ import { prisma } from '../../../../prisma/prisma.js'
 
 export class PostgresGetTransactionsByUserIdRepository {
     async execute(userId) {
-        return await prisma.transactions.findMany({
+        return await prisma.transaction.findMany({
             where: {
-                id: userId,
+                user_id: userId,
             },
         })
     }
