@@ -1,6 +1,6 @@
 export class TransactionNotFoundError extends Error {
-    constructor(userId) {
-        super(`Transaction with ID ${userId} was not found.`)
+    constructor(transactionId) {
+        super(`Transaction with ID ${transactionId} was not found.`)
         this.name = 'TransactionNotFoundError'
     }
 }
