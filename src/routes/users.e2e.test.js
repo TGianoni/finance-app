@@ -45,5 +45,9 @@ describe('User Router E2E Tests', () => {
             .send(updateUserParams)
 
         expect(response.status).toBe(200)
+        expect(response.body.first_name).toBe(updateUserParams.first_name)
+        expect(response.body.last_name).toBe(updateUserParams.last_name)
+        expect(response.body.email).toBe(updateUserParams.email)
+        expect(response.body.password).not.toBe(createdUser.password)
     })
 })
