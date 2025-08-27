@@ -6,7 +6,9 @@ import {
     badRequest,
     ok,
     serverError,
+    userNotFoundResponse,
 } from '../helpers/index.js'
+import { EmailAlreadyInUseError, UserNotFoundError } from '../../errors/user.js'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -36,6 +38,14 @@ export class UpdateUserController {
                 return badRequest({
                     message: error.errors[0].message,
                 })
+            }
+
+            if (error instanceof EmailAlreadyInUseError) {
+                return badRequest({ message: error.message })
+            }
+
+            if (error instanceof UserNotFoundError) {
+                return userNotFoundResponse()
             }
 
             console.error(error)
