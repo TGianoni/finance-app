@@ -155,7 +155,7 @@ describe('Create User Controller', () => {
         // que já existe e você altera algum comportamento dela, como o método execute
     })
 
-    it('should return 500 if CreateUserUseCase throws EmailAlreadyInUseError', async () => {
+    it('should return 400 if CreateUserUseCase throws EmailAlreadyInUseError', async () => {
         // arrange
         const { createUserUseCase, sut } = makeSut()
         jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
@@ -166,6 +166,6 @@ describe('Create User Controller', () => {
         const result = await sut.execute(httpRequest)
 
         // assert
-        expect(result.statusCode).toBe(500)
+        expect(result.statusCode).toBe(400)
     })
 })
