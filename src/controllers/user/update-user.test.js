@@ -2,6 +2,7 @@ import { ZodError } from 'zod'
 import { UpdateUserController } from './update-user'
 import { faker } from '@faker-js/faker'
 import { user } from '../../tests/index.js'
+import { UserNotFoundError } from '../../errors/user.js'
 
 describe('UpdateUserController', () => {
     class UpdateUserUseCaseStub {
@@ -154,5 +155,21 @@ describe('UpdateUserController', () => {
             httpRequest.params.userId,
             httpRequest.body,
         )
+    })
+    it('should return 404 if UpdateUserUseCase throws UserNotFoundError', async () => {
+        // arrange
+        const { sut, updateUserUseCase } = makeSut()
+        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
+            new UserNotFoundError(faker.string.uuid()),
+        )
+
+        // act
+        const result = await sut.execute({
+            params: httpRequest.params,
+            body: httpRequest.body,
+        })
+
+        // assert
+        expect(result.statusCode).toBe(404)
     })
 })
