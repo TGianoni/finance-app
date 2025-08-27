@@ -46,7 +46,7 @@ export class PostgresGetUserBalanceRepository {
         )
 
         return {
-            ernings: _totalEarnings,
+            earnings: _totalEarnings,
             expenses: _totalExpenses,
             investments: _totalInvestments,
             balance: balance,
