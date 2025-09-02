@@ -112,9 +112,9 @@ describe('UpdateUserController', () => {
     it('should return 500 if UpdateUserUseCase throws with generic error', async () => {
         // arrange
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new Error('Generic error'),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(new Error('Generic error'))
 
         // act
         const result = await sut.execute({
@@ -129,9 +129,9 @@ describe('UpdateUserController', () => {
     it('should return 400 if UpdateUserUseCase throws email already in use error', async () => {
         // arrange
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new ZodError(faker.internet.email()),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(new ZodError(faker.internet.email()))
 
         // act
         const result = await sut.execute({
@@ -145,7 +145,7 @@ describe('UpdateUserController', () => {
     it('should call UpdateUserUseCase with correct params', async () => {
         // arrange
         const { sut, updateUserUseCase } = makeSut()
-        const executeSpy = jest.spyOn(updateUserUseCase, 'execute')
+        const executeSpy = import.meta.jest.spyOn(updateUserUseCase, 'execute')
 
         // act
         await sut.execute(httpRequest)
@@ -159,9 +159,9 @@ describe('UpdateUserController', () => {
     it('should return 404 if UpdateUserUseCase throws UserNotFoundError', async () => {
         // arrange
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new UserNotFoundError(faker.string.uuid()),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(new UserNotFoundError(faker.string.uuid()))
 
         // act
         const result = await sut.execute({

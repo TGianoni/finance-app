@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { prisma } from '../../../../prisma/prisma'
-import { transaction, user } from '../../../tests'
-import { PostgresUpdateTransactionRepository } from './update-transaction'
+import { transaction, user } from '../../../tests/index.js'
+import { PostgresUpdateTransactionRepository } from './update-transaction.js'
 import { TransactionType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
@@ -40,7 +40,7 @@ describe('PostgresUpdateTransactionRepository', () => {
             data: { ...transaction, user_id: user.id },
         })
         const sut = new PostgresUpdateTransactionRepository()
-        const prismaSpy = jest.spyOn(prisma.transaction, 'update')
+        const prismaSpy = import.meta.jest.spyOn(prisma.transaction, 'update')
 
         await sut.execute(transaction.id, { ...transaction, user_id: user.id })
 
@@ -53,9 +53,9 @@ describe('PostgresUpdateTransactionRepository', () => {
     })
     it('should throw if Prisma throws', async () => {
         const sut = new PostgresUpdateTransactionRepository()
-        jest.spyOn(prisma.transaction, 'update').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(prisma.transaction, 'update')
+            .mockRejectedValueOnce(new Error())
 
         const promise = sut.execute(transaction.id, {
             ...transaction,
@@ -66,11 +66,13 @@ describe('PostgresUpdateTransactionRepository', () => {
     })
     it('should throw TransactionNotFoundError if Prisma does not find record to update', async () => {
         const sut = new PostgresUpdateTransactionRepository()
-        jest.spyOn(prisma.transaction, 'update').mockRejectedValueOnce(
-            new PrismaClientKnownRequestError('', {
-                code: 'P2025',
-            }),
-        )
+        import.meta.jest
+            .spyOn(prisma.transaction, 'update')
+            .mockRejectedValueOnce(
+                new PrismaClientKnownRequestError('', {
+                    code: 'P2025',
+                }),
+            )
 
         const promise = sut.execute(transaction.id, transaction)
 

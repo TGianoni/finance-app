@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { UpdateTransactionController } from './update-transaction.js'
-import { transaction } from './update-transaction.js'
+import { transaction } from '../../tests/index.js'
 import { TransactionNotFoundError } from '../../errors/transaction.js'
 
 describe('UpdateTransactionController', () => {
@@ -109,9 +109,9 @@ describe('UpdateTransactionController', () => {
     it('should return 500 when UpdateTransactionUseCase throws', async () => {
         // arrange
         const { sut, updateTransactionUseCase } = makeSut()
-        jest.spyOn(updateTransactionUseCase, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(updateTransactionUseCase, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         // act
         const result = await sut.execute(baseHttpRequest)
@@ -122,9 +122,9 @@ describe('UpdateTransactionController', () => {
     it('should return 404 when UserNotFoundError is thrown', async () => {
         // arrange
         const { sut, updateTransactionUseCase } = makeSut()
-        jest.spyOn(updateTransactionUseCase, 'execute').mockRejectedValueOnce(
-            new TransactionNotFoundError(),
-        )
+        import.meta.jest
+            .spyOn(updateTransactionUseCase, 'execute')
+            .mockRejectedValueOnce(new TransactionNotFoundError())
 
         // act
         const result = await sut.execute(baseHttpRequest)
@@ -135,7 +135,10 @@ describe('UpdateTransactionController', () => {
     it('should call UpdateTransactioUseCase with correct params', async () => {
         // arrange
         const { sut, updateTransactionUseCase } = makeSut()
-        const executeSpy = jest.spyOn(updateTransactionUseCase, 'execute')
+        const executeSpy = import.meta.jest.spyOn(
+            updateTransactionUseCase,
+            'execute',
+        )
 
         // act
         await sut.execute(baseHttpRequest)
