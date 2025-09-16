@@ -1,4 +1,3 @@
-import { TokensGeneratorAdapter } from '../../adapters/tokens-generator.js'
 import { InvalidPasswordError, UserNotFoundError } from '../../errors/user.js'
 
 export class LoginUserUseCase {
