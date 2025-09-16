@@ -1,9 +1,10 @@
-import { Router } from 'express'
+import { request, response, Router } from 'express'
 import {
     makeCreateUserController,
     makeDeleteUserController,
     makeGetUserBalanceController,
     makeGetUserByIdController,
+    makeLoginUserController,
     makeUpdateUserController,
 } from '../factories/controllers/user.js'
 
@@ -47,4 +48,12 @@ usersRouter.delete('/:userId', async (request, response) => {
     const { statusCode, body } = await deleteUserController.execute(request)
 
     response.status(statusCode).send(body) //json é igual a send
+})
+
+usersRouter.post('/login', async (request, response) => {
+    const loginUserController = makeLoginUserController()
+
+    const { statusCode, body } = await loginUserController.execute(request)
+
+    response.status(statusCode).send(body)
 })
