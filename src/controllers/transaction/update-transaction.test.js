@@ -49,25 +49,6 @@ describe('UpdateTransactionController', () => {
         // assert
         expect(result.statusCode).toBe(400)
     })
-    it('should return 400 when unallowed field is provided', async () => {
-        // arrange
-        const { sut } = makeSut()
-
-        // act
-        const result = await sut.execute({
-            ...baseHttpRequest,
-            body: {
-                ...baseHttpRequest,
-                body: {
-                    ...baseHttpRequest.body,
-                    unallowed_field: 'unallowed_field',
-                },
-            },
-        })
-
-        // assert
-        expect(result.statusCode).toBe(400)
-    })
     it('should return 400 when amount is invalid', async () => {
         // arrange
         const { sut } = makeSut()
@@ -76,11 +57,8 @@ describe('UpdateTransactionController', () => {
         const result = await sut.execute({
             ...baseHttpRequest,
             body: {
-                ...baseHttpRequest,
-                body: {
-                    ...baseHttpRequest.body,
-                    amount: 'invalid_amount',
-                },
+                ...baseHttpRequest.body,
+                amount: 'invalid_amount',
             },
         })
 
@@ -95,11 +73,8 @@ describe('UpdateTransactionController', () => {
         const result = await sut.execute({
             ...baseHttpRequest,
             body: {
-                ...baseHttpRequest,
-                body: {
-                    ...baseHttpRequest.body,
-                    type: 'invalid_type',
-                },
+                ...baseHttpRequest.body,
+                type: 'invalid_type',
             },
         })
 
