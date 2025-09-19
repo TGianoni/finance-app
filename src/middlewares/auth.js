@@ -22,9 +22,6 @@ export const auth = (request, response, next) => {
         next()
 
         // se não for válido, retornar um erro 401
-
-        console.log('auth middleware is running')
-        next()
     } catch (error) {
         console.log(error)
         return response.status(401).send({ message: 'Unauthorized' })
