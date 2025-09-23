@@ -155,4 +155,21 @@ describe('User Router E2E Tests', () => {
         expect(result.body.tokens.accessToken).toBeDefined()
         expect(result.body.tokens.refreshToken).toBeDefined()
     })
+    it('POST /api/users/refresh-token should return 200 and new tokens when refresh token is valid', async () => {
+        const { body: createdUser } = await request(app)
+            .post('/api/users')
+            .send({
+                ...user,
+                id: undefined,
+            })
+        const result = await request(app)
+            .post('/api/users/refresh-token')
+            .send({
+                refreshToken: createdUser.tokens.refreshToken,
+            })
+
+        expect(result.status).toBe(200)
+        expect(result.body.accessToken).toBeDefined()
+        expect(result.body.refreshToken).toBeDefined()
+    })
 })
