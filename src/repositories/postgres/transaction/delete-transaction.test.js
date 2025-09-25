@@ -1,9 +1,9 @@
-import { prisma } from '../../../../prisma/prisma'
-import { PostgresDeleteTransactionRepository } from './delete-transaction'
+import { prisma } from '../../../../prisma/prisma.js'
+import { PostgresDeleteTransactionRepository } from './delete-transaction.js'
 import { transaction, user } from '../../../tests/index.js'
 import dayjs from 'dayjs'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { TransactionNotFoundError } from '../../../errors'
+import { TransactionNotFoundError } from '../../../errors/index.js'
 
 describe('PostgresDeleteTransactionRepository', () => {
     it('should delete a transaction on db', async () => {
