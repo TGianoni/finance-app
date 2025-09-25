@@ -79,12 +79,18 @@ describe('GetTransactionsByUserIdUseCase', () => {
             'execute',
         )
         const userId = faker.string.uuid()
+        const from = '2023-01-01'
+        const to = '2023-12-31'
 
         // act
-        await sut.execute(userId)
+        await sut.execute(userId, from, to)
 
         // assert
-        expect(getTransactionByUserIdRepositorySpy).toHaveBeenCalledWith(userId)
+        expect(getTransactionByUserIdRepositorySpy).toHaveBeenCalledWith(
+            userId,
+            from,
+            to,
+        )
     })
     it('should throw if GetUserByIdRepository throws', async () => {
         // arrange
