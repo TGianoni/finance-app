@@ -30,12 +30,15 @@ describe('GetUserBalanceUseCase', () => {
             getUserByIdRepository,
         }
     }
+
+    const from = '2025-01-01'
+    const to = '2025-01-31'
     it('should get user balance successfully', async () => {
         // arrange
         const { sut } = makeSut()
 
         // act
-        const result = await sut.execute(faker.string.uuid())
+        const result = await sut.execute(faker.string.uuid(), from, to)
 
         // assert
         expect(result).toEqual(userBalance)
@@ -49,7 +52,7 @@ describe('GetUserBalanceUseCase', () => {
         const userId = faker.string.uuid()
 
         // act
-        const result = sut.execute(userId)
+        const result = sut.execute(userId, from, to)
 
         // assert
         await expect(result).rejects.toThrow(new UserNotFoundError(userId))
@@ -64,7 +67,7 @@ describe('GetUserBalanceUseCase', () => {
         )
 
         // act
-        await sut.execute(userId)
+        await sut.execute(userId, from, to)
 
         // assert
         expect(executeSpy).toHaveBeenCalledWith(userId)
@@ -79,10 +82,10 @@ describe('GetUserBalanceUseCase', () => {
         )
 
         // act
-        await sut.execute(userId)
+        await sut.execute(userId, from, to)
 
         // assert
-        expect(executeSpy).toHaveBeenCalledWith(userId)
+        expect(executeSpy).toHaveBeenCalledWith(userId, from, to)
     })
     it('should throw if GetUserByIdRepository throws', async () => {
         // arrange
@@ -92,7 +95,7 @@ describe('GetUserBalanceUseCase', () => {
             .mockRejectedValueOnce(new Error())
 
         // act
-        const result = sut.execute(faker.string.uuid())
+        const result = sut.execute(faker.string.uuid(), from, to)
 
         // assert
         await expect(result).rejects.toThrow()
@@ -105,7 +108,7 @@ describe('GetUserBalanceUseCase', () => {
             .mockRejectedValueOnce(new Error())
 
         // act
-        const result = sut.execute(faker.string.uuid())
+        const result = sut.execute(faker.string.uuid(), from, to)
 
         // assert
         await expect(result).rejects.toThrow()
