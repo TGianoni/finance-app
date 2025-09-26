@@ -7,7 +7,7 @@ describe('Transaction Routes E2E Tests', () => {
     const from = '2024-01-01'
     const to = '2024-01-30'
 
-    it('POST /api/transactions should return 201 when creating a transaction sucessfully', async () => {
+    it('POST /api/transactions/me should return 201 when creating a transaction sucessfully', async () => {
         const { body: createdUser } = await request(app)
             .post('/api/users')
             .send({
@@ -15,7 +15,7 @@ describe('Transaction Routes E2E Tests', () => {
                 id: undefined,
             })
         const response = await request(app)
-            .post('/api/transactions')
+            .post('/api/transactions/me')
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({ ...transaction, user_id: createdUser.id, id: undefined })
 
@@ -33,7 +33,7 @@ describe('Transaction Routes E2E Tests', () => {
             })
 
         const { body: createdTransaction } = await request(app)
-            .post('/api/transactions')
+            .post('/api/transactions/me')
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({
                 ...transaction,
@@ -43,13 +43,13 @@ describe('Transaction Routes E2E Tests', () => {
             })
 
         const response = await request(app)
-            .get(`/api/transactions?from=${from}&to=${to}`)
+            .get(`/api/transactions/me?from=${from}&to=${to}`)
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
 
         expect(response.status).toBe(200)
         expect(response.body[0].id).toBe(createdTransaction.id)
     })
-    it('PATCH /api/transactions/:transactionId should return 200 when updating a transaction sucessfully', async () => {
+    it('PATCH /api/transactions/me/:transactionId should return 200 when updating a transaction sucessfully', async () => {
         const { body: createdUser } = await request(app)
             .post('/api/users')
             .send({
@@ -57,12 +57,12 @@ describe('Transaction Routes E2E Tests', () => {
                 id: undefined,
             })
         const { body: createdTransaction } = await request(app)
-            .post('/api/transactions')
+            .post('/api/transactions/me')
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({ ...transaction, user_id: createdUser.id, id: undefined })
 
         const response = await request(app)
-            .patch(`/api/transactions/${createdTransaction.id}`)
+            .patch(`/api/transactions/me/${createdTransaction.id}`)
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({ amount: 100, type: TransactionType.INVESTMENT })
 
@@ -78,12 +78,12 @@ describe('Transaction Routes E2E Tests', () => {
                 id: undefined,
             })
         const { body: createdTransaction } = await request(app)
-            .post('/api/transactions')
+            .post('/api/transactions/me')
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({ ...transaction, user_id: createdUser.id, id: undefined })
 
         const response = await request(app)
-            .delete(`/api/transactions/${createdTransaction.id}`)
+            .delete(`/api/transactions/me/${createdTransaction.id}`)
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
 
         expect(response.status).toBe(200)
@@ -98,7 +98,7 @@ describe('Transaction Routes E2E Tests', () => {
             })
 
         const response = await request(app)
-            .patch(`/api/transacitons/${transaction.id}`)
+            .patch(`/api/transacitons/me/${transaction.id}`)
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
             .send({ amount: 100, type: TransactionType.INVESTMENT })
 
@@ -113,7 +113,7 @@ describe('Transaction Routes E2E Tests', () => {
             })
 
         const response = await request(app)
-            .delete(`/api/transacitons/${transaction.id}`)
+            .delete(`/api/transacitons/me/${transaction.id}`)
             .set('Authorization', `Bearer ${createdUser.tokens.accessToken}`)
 
         expect(response.status).toBe(404)
