@@ -122,6 +122,9 @@ describe('User Router E2E Tests', () => {
             expenses: '2000',
             investments: '2000',
             balance: '6000',
+            earningsPercentage: '71',
+            expensesPercentage: '14',
+            investmentsPercentage: '14',
         })
     })
     it('POST /api/users should return 400 when the provided email is already in use', async () => {
